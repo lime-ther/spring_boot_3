@@ -5,12 +5,13 @@
 ```
 
 **Connect to MySQL as root**
+
 ```
-    mysql -u root -p 123456 
+    mysql -u root -p123456 
 ```
 
 **Connect to MySQL as user**
 
 ```
-    mysql -u lime -p 123456
+    mysql -u lime -p123456
 ```
