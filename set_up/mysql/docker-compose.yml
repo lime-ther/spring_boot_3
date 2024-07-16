@@ -8,6 +8,6 @@ services:
       MYSQL_ROOT_PASSWORD: 123456
       MYSQL_USER: lime
       MYSQL_PASSWORD: 123456
-      MYSQL_DATABASE: indentity_service
+      MYSQL_DATABASE: identity_service
     volumes:
       - ./mysql/data:/var/lib/mysql

@@ -2,6 +2,8 @@ package com.dev.identity.service.service;
 
 import com.dev.identity.service.dto.request.UserCreationRequest;
 import com.dev.identity.service.entity.User;
+import com.dev.identity.service.exception.AppException;
+import com.dev.identity.service.exception.ErrorCode;
 import com.dev.identity.service.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,11 @@ public class UserService {
 
     public User createUser(UserCreationRequest request) {
         User user = new User();
+
+        if (userRepository.existsByUsername(request.getUsername())) {
+            throw new AppException(ErrorCode.USER_EXISTED);
+        }
+
         user.setUsername(request.getUsername());
         user.setPassword(request.getPassword());
         user.setFirstName(request.getFirstName());
@@ -30,6 +37,6 @@ public class UserService {
 
     public User getUser(String userId) {
         return userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new RuntimeException("User not found."));
     }
 }
