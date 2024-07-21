@@ -3,7 +3,7 @@ services:
     image: mysql:8.4.0
     container_name: mysql_container 
     ports:
-      - "3310:3306"
+      - "3306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: 123456
       MYSQL_USER: lime
@@ -11,3 +11,27 @@ services:
       MYSQL_DATABASE: identity_service
     volumes:
       - ./mysql/data:/var/lib/mysql
+    networks:
+      - mysql-phpmyadmin
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: pma
+    links:
+      - mysql
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 1
+    restart: always
+    ports:
+      - 8081:80
+    networks:
+      - mysql-phpmyadmin
+
+networks:
+  mysql-phpmyadmin:
+
+
+    
+  
