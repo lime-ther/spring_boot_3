@@ -21,19 +21,28 @@ public class UserController {
     UserService userService;
 
     @PostMapping
-    ApiResponse<User> createUser(@RequestBody @Valid UserCreationRequest request) {
-        ApiResponse<User> apiResponse = new ApiResponse<>();
+    ApiResponse<UserResponse> createUser(@RequestBody @Valid UserCreationRequest request) {
+        ApiResponse<UserResponse> apiResponse = new ApiResponse<>();
         apiResponse.setResult(userService.createUser(request));
         return apiResponse;
     }
 
     @GetMapping
-    List<User> getUsers() {
-        return userService.getUsers();
+    ApiResponse<List<UserResponse>> getUsers() {
+        return ApiResponse.<List<UserResponse>>builder()
+                .result(userService.getUsers())
+                .build();
     }
 
     @GetMapping("/{userId}")
     UserResponse getUser(@PathVariable("userId") String userId) {
         return userService.getUser(userId);
+    }
+
+    @GetMapping("/owner")
+    ApiResponse<UserResponse> getOwner() {
+        return ApiResponse.<UserResponse>builder()
+                .result(userService.getOwner())
+                .build();
     }
 }
