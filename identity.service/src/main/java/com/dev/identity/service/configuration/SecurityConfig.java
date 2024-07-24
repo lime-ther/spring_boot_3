@@ -1,6 +1,5 @@
 package com.dev.identity.service.configuration;
 
-import com.dev.identity.service.utils.Role;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

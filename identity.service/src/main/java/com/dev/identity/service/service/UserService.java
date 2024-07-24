@@ -19,6 +19,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -41,9 +42,10 @@ public class UserService {
         HashSet<String> roles = new HashSet<>();
         roles.add(Role.USER.name());
 
-        user.setRoles(roles);
+//        user.setRoles(roles);
 
-        return userMapper.toUserResponse(userRepository.save(user));
+//        return userMapper.toUserResponse(userRepository.save(user));
+        return null;
     }
 
     public UserResponse updateUser(String userId, UserUpdateRequest request) {
@@ -51,7 +53,8 @@ public class UserService {
                 .orElseThrow(() -> new RuntimeException("User not found."));
         userMapper.updateUser(user, request);
 
-        return userMapper.toUserResponse(userRepository.save(user));
+//        return userMapper.toUserResponse(userRepository.save(user));
+        return null;
     }
 
     public void deleteUser(String userId) {
@@ -60,14 +63,16 @@ public class UserService {
 
     @PreAuthorize("hasRole('ADMIN')")
     public List<UserResponse> getUsers() {
-        return userRepository.findAll().stream()
-                .map(userMapper::toUserResponse).toList();
+//        return userRepository.findAll().stream()
+//                .map(userMapper::toUserResponse).toList();
+        return new ArrayList<>();
     }
 
     @PostAuthorize("returnObject.username == authentication.name")
     public UserResponse getUser(String userId) {
-        return userMapper.toUserResponse(userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found.")));
+//        return userMapper.toUserResponse(userRepository.findById(userId)
+//                .orElseThrow(() -> new RuntimeException("User not found.")));
+        return null;
     }
 
     public UserResponse getOwner() {
@@ -78,6 +83,7 @@ public class UserService {
                 () -> new AppException(ErrorCode.USER_NOT_EXISTED)
         );
 
-        return userMapper.toUserResponse(user);
+//        return userMapper.toUserResponse(user);
+        return null;
     }
 }
