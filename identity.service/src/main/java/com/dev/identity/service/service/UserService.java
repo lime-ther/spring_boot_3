@@ -3,19 +3,19 @@ package com.dev.identity.service.service;
 import com.dev.identity.service.dto.request.UserCreationRequest;
 import com.dev.identity.service.dto.request.UserUpdateRequest;
 import com.dev.identity.service.dto.response.UserResponse;
+import com.dev.identity.service.entity.Role;
 import com.dev.identity.service.entity.User;
 import com.dev.identity.service.exception.AppException;
 import com.dev.identity.service.exception.ErrorCode;
 import com.dev.identity.service.mapper.UserMapper;
+import com.dev.identity.service.repository.RoleRepository;
 import com.dev.identity.service.repository.UserRepository;
-import com.dev.identity.service.utils.Role;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +30,7 @@ public class UserService {
     UserRepository userRepository;
     UserMapper userMapper;
     PasswordEncoder passwordEncoder;
+    RoleRepository roleRepository;
 
     public UserResponse createUser(UserCreationRequest request) {
         if (userRepository.existsByUsername(request.getUsername())) {
@@ -40,7 +41,7 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
         HashSet<String> roles = new HashSet<>();
-        roles.add(Role.USER.name());
+//        roles.add(Role.USER.name());
 
 //        user.setRoles(roles);
 
@@ -52,16 +53,19 @@ public class UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found."));
         userMapper.updateUser(user, request);
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        List<Role> roles = roleRepository.findAllById(request.getRoles());
+        user.setRoles(new HashSet<>(roles));
 
-//        return userMapper.toUserResponse(userRepository.save(user));
-        return null;
+        return userMapper.toUserResponse(userRepository.save(user));
     }
 
     public void deleteUser(String userId) {
         userRepository.deleteById(userId);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('APPROVE_POST')")
     public List<UserResponse> getUsers() {
 //        return userRepository.findAll().stream()
 //                .map(userMapper::toUserResponse).toList();
