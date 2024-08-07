@@ -25,5 +25,5 @@ public enum ErrorCode {
 
     private final int code;
     private final String message;
-    private HttpStatusCode httpStatusCode;
+    private final HttpStatusCode httpStatusCode;
 }

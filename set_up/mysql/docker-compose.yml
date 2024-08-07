@@ -10,7 +10,7 @@ services:
       MYSQL_PASSWORD: 123456
       MYSQL_DATABASE: identity_service
     volumes:
-      - ./mysql/data:/var/lib/mysql
+      - mysql:/var/lib/mysql
     networks:
       - mysql-phpmyadmin
 
@@ -32,6 +32,8 @@ services:
 networks:
   mysql-phpmyadmin:
 
+volumes:
+  mysql:
 
     
   
